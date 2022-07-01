@@ -1,5 +1,8 @@
 # Disaster Response Pipeline Project
 
+### Project's Goal
+To analyze disaster data from Appen (formally Figure 8) to build a model for an API that classifies disaster messages.
+<br>
 ### Project Components
 There are three components you'll need to complete for this project.
 
@@ -21,6 +24,7 @@ In a Python script, `train_classifier.py`, write a machine learning pipeline tha
 * Trains and tunes a model using GridSearchCV
 * Outputs results on the test set
 * Exports the final model as a pickle file
+
 
 3. Flask Web App
 
