@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Heatmap
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -43,6 +43,12 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
+    category_num = df.drop(['id', 'message', 'original', 'genre'], axis = 1).sum()
+    category_num = category_num.sort_values(ascending = False)
+    categories = list(category_num.index)
+    corr_df = df.groupby(['genre'])[df.columns[4:]].mean()
+    corr_arr = corr_df.values
+    
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -61,6 +67,42 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            "data": [
+              {
+                "type": "bar",
+                "x": categories,
+                "y": category_num,
+                "marker": {
+                  "color": 'blue'}
+                }
+            ],
+            "layout": {
+              "title": "Count of Messages by Category",
+              'yaxis': {
+                  'title': "Count"
+              },
+              'xaxis': {
+                  'title': "Genre"
+              },
+              'barmode': 'group'
+            }
+        },
+        {
+            'data': [
+               Heatmap(x = df.columns[4:].values, y = ['direct', 'news', 'social'], z = corr_arr)
+            ],
+
+            'layout': {
+                'title': "Categories mean values of Genres",
+                'yaxis': {
+                    'title': "Genre"
+                },
+                'xaxis': {
+                    'title': "Categories "
                 }
             }
         }

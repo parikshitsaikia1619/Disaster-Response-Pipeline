@@ -27,7 +27,7 @@ def load_data(messages_filepath, categories_filepath):
         categories_new[column] = categories_new[column].str[-1]
 
         # convert column from string to numeric
-        categories_new[column] = categories_new[column].astype(int)
+        categories_new[column] = pd.to_numeric (categories_new[column], errors = 'coerce')
     categories = pd.concat([categories, categories_new], axis =1)
     categories.drop(columns=['categories'], inplace= True)
     df =  pd.merge(df, categories, on="id")
